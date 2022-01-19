@@ -115,7 +115,9 @@ var createTable_ = function() {
     },
 
     dataRange: function() {
-      return this.baseRange().getDataRegion();
+      return this.ignoreBlank ?
+          this.baseRange().getDataRegion() :
+          this.baseRange().offset(0, 0, this.sheet().getLastRow() - this.rowShift, this.columns().length);
     },
 
     rangeByRow: function(row_) {
@@ -297,7 +299,10 @@ var createTable_ = function() {
       autoIncrement: true,
       rowShift: 0,
       columnShift: 0,
+      ignoreBlank: true,
     }, classProps));
+
+    Child.sheet_memo_ = ss_.getSheetByName(classProps.sheetName);
 
     return Child;
   };

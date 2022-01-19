@@ -3,13 +3,13 @@ var createRelation_ = function() {
     this.Table = TableClass;
     this.predicates = [];
   };
-  
+
   Object.defineProperties(Relation_.prototype, {
     where: { value: function(predicate) {
       this.predicates.push(predicate);
       return this;
     }},
-    
+
     all: { value: function() {
       var records = [];
       var that = this;
@@ -22,21 +22,21 @@ var createRelation_ = function() {
         }
         if (passed) records.push(record);
       });
-      
+
       if (!this.comparator) return records;
       return compare(this.comparator, records);
     }},
-    
+
     first: { value: function() {
       var records = this.all();
       return records.length > 0 ? records[0] : null;
     }},
-    
+
     last: { value: function() {
       var records = this.all();
       return records.length > 0 ? records[records.length - 1] : null;
     }},
-    
+
     pluck: { value: function(column) {
       var result = [];
       var that = this;
@@ -45,7 +45,7 @@ var createRelation_ = function() {
       });
       return result;
     }},
-    
+
     sum: { value: function(column) {
       var total = 0;
       var that = this;
@@ -54,21 +54,21 @@ var createRelation_ = function() {
       });
       return total;
     }},
-    
+
     max: { value: function(column) {
       return Math.max.apply(null, this.pluck(column));
     }},
-    
+
     min: { value: function(column) {
       return Math.min.apply(null, this.pluck(column));
     }},
-    
+
     order: { value: function(comparator) {
       this.comparator = comparator;
       return this;
     }},
   });
-  
+
   var evaluate = function(predicate, record) {
     var t = typeof predicate;
     if (t === 'function') {
@@ -79,7 +79,7 @@ var createRelation_ = function() {
       throw 'Invalid where condition [' + predicate + ']';
     }
   };
-  
+
   var evaludateAsObject = function(object, record) {
     var passed = true;
     for (var attr in object) {
@@ -88,14 +88,14 @@ var createRelation_ = function() {
     }
     return true;
   };
-  
+
   var compare = function(comparator, records) {
     var t = typeof comparator;
     if (t === 'function') return records.sort(comparator);
     if (t === 'string') return records.sort(createComparator(comparator));
     throw 'Invalid order comparator [' + comparator + ']';
   };
-  
+
   var createComparator = function(strComparator) {
     var funcs = [];
     strComparator.split(',').forEach(function(part) {
@@ -118,10 +118,10 @@ var createRelation_ = function() {
         throw 'Invalid order comparator [' + strComparator + ']';
       }
     });
-  
+
     return createCombinedComparator(funcs);
   };
-  
+
   var createCombinedComparator = function(comparators) {
     return function(a, b) {
       for (var i = 0; i < comparators.length; i++) {

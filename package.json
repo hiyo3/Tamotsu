@@ -1,0 +1,26 @@
+{
+  "name": "tamotsu",
+  "version": "1.0.0",
+  "description": "Object-Spreadsheet Mapping for Google Apps Script",
+  "scripts": {
+    "dist": "gulp dist",
+    "pretest": "gulp test; cd tests; clasp push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiyo3/Tamotsu.git"
+  },
+  "author": "@hiyo3",
+  "license": "Same as the original project (https://github.com/itmammoth/Tamotsu)",
+  "bugs": {
+    "url": "https://github.com/hiyo3/Tamotsu/issues"
+  },
+  "homepage": "https://github.com/hiyo3/Tamotsu#readme",
+  "devDependencies": {
+    "@google/clasp": "^2.4.1",
+    "del": "^6.0.0",
+    "gulp": "4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-expose": "^0.0.7"
+  }
+}

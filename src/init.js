@@ -13,6 +13,10 @@ function initialize(spreadsheet) {
   ss_ = spreadsheet || SpreadsheetApp.getActive();
   Table = createTable_();
   Relation_ = createRelation_();
+
+  // export
+  this.Table = Table;
+
   callbacks_.forEach(function(callback) {
     callback(spreadsheet);
   });
@@ -25,4 +29,12 @@ function initialize(spreadsheet) {
  */
 function onInitialized(callback) {
   callbacks_.push(callback);
+}
+
+if (typeof module === 'object') {
+  module.exports = {
+    initialize: initialize,
+    onInitialized: onInitialized,
+    Table: Table,
+  };
 }
