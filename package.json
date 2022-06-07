@@ -18,6 +18,7 @@
   "homepage": "https://github.com/hiyo3/Tamotsu#readme",
   "devDependencies": {
     "@google/clasp": "^2.4.1",
+    "@types/google-apps-script": "^1.0.47",
     "del": "^6.0.0",
     "gulp": "4.0.2",
     "gulp-concat": "^2.6.1",
