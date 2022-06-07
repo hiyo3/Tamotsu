@@ -16,9 +16,9 @@ gulp.task('dist', gulp.series('clean', async function(){
       .pipe(gulp.dest('dist'));
 }));
 
-gulp.task('test', gulp.series('clean', async function(){
+gulp.task('test', async function(){
   return gulp.src('src/**/*.js')
       .pipe(concat('Tamotsu.js'))
       .pipe(expose('this', 'Tamotsu'))
       .pipe(gulp.dest('tests'));
-}));
+});
