@@ -36,7 +36,7 @@ function testTamotsuModule() {
     testRunner('#initialize(ss)', (t) => {
       Tamotsu.initialize(testSs1);
       t.equal(typeof Tamotsu.Table, 'function', 'Tamotsu.Table is defined');
-      t.equal(typeof Tamotsu.Table.define, 'function', 'Tamotsu.Table.define is not defined');
+      t.equal(typeof Tamotsu.Table.define, 'function', 'Tamotsu.Table.define is defined');
     });
 
     testRunner('#initialize(ss) with callback', (t) => {
