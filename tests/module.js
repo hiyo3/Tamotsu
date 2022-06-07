@@ -75,11 +75,10 @@ function testTamotsuModule() {
     });
 
     testRunner.finish();
-
-    DriveApp.removeFile(DriveApp.getFileById(testSs1.getId()));
-    DriveApp.removeFile(DriveApp.getFileById(testSs2.getId()));
   } catch (error) {
-    DriveApp.removeFile(DriveApp.getFileById(testSs1.getId()));
-    DriveApp.removeFile(DriveApp.getFileById(testSs2.getId()));
+    console.error(error);
   }
+
+  DriveApp.removeFile(DriveApp.getFileById(testSs1.getId()));
+  DriveApp.removeFile(DriveApp.getFileById(testSs2.getId()));
 }
