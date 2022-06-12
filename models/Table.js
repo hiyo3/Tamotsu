@@ -331,6 +331,8 @@ var createTable_ = function() {
       columnShift: 0,
     }, classProps));
 
+    Child.sheet_memo_ = ss_.getSheetByName(classProps.sheetName);
+
     return Child;
   };
 
