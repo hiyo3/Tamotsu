@@ -319,7 +319,7 @@ var createTable_ = function() {
     },
 
     dataRange: function() {
-      return this.ignoreBlank ?
+      return !this.readBlank ?
           this.baseRange().getDataRegion() :
           this.baseRange().offset(0, 0, this.sheet().getLastRow() - this.rowShift, this.columns().length);
     },
@@ -345,7 +345,9 @@ var createTable_ = function() {
     },
 
     allValues: function() {
-      var allValues = this.dataRange().getValues();
+      var allValues = !this.readBlank
+        ? this.dataRange().getValues()
+        : this.sheet().getSheetValues(1 + this.rowShift, 1 + this.columnShift, -1, this.columns().length);
       allValues.shift();
       return allValues;
     },
@@ -535,7 +537,7 @@ var createTable_ = function() {
       autoIncrement: true,
       rowShift: 0,
       columnShift: 0,
-      ignoreBlank: true,
+      readBlank: false,
     }, classProps));
 
     Child.sheet_memo_ = ss_.getSheetByName(classProps.sheetName);
