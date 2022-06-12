@@ -61,7 +61,7 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {boolean} [autoIncrement=true] `true` when omitted
  * @property {number} [rowShift=0] `0` when omitted
  * @property {number} [columnShift=0] `0` when omitted
- * @property {boolean} [ignoreBlank=true] `true` when omitted
+ * @property {boolean} [readBlank=false] `false` when omitted
  */
 /**
  * @typedef {Object} Tamotsu.InstanceProperties
