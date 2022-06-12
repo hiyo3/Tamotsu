@@ -115,7 +115,9 @@ var createTable_ = function() {
     },
 
     dataRange: function() {
-      return this.baseRange().getDataRegion();
+      return !this.readBlank ?
+          this.baseRange().getDataRegion() :
+          this.baseRange().offset(0, 0, this.sheet().getLastRow() - this.rowShift, this.columns().length);
     },
 
     rangeByRow: function(row_) {
@@ -139,7 +141,9 @@ var createTable_ = function() {
     },
 
     allValues: function() {
-      var allValues = this.dataRange().getValues();
+      var allValues = !this.readBlank
+        ? this.dataRange().getValues()
+        : this.sheet().getSheetValues(1 + this.rowShift, 1 + this.columnShift, -1, this.columns().length);
       allValues.shift();
       return allValues;
     },
@@ -329,6 +333,7 @@ var createTable_ = function() {
       autoIncrement: true,
       rowShift: 0,
       columnShift: 0,
+      readBlank: false,
     }, classProps));
 
     return Child;

@@ -116,6 +116,7 @@ Returns a table class extended from `Tamotsu.Table`.
 |autoIncrement            |boolean|If true, id is automatically incremented when its value is blank (Default: true)|
 |rowShift                 |number |Number of rows before the start of the table  (Default: 0)|
 |columnShift              |number |Number of columns before the start of the table (Default: 0)|
+|readBlank                |boolean|If true, blank rows in between data are also read; If false, data range is until the first blank row appears (Default: false)|
 
 #### Prepared `instanceProperties`
 |Key     |Type    |Description|
