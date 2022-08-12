@@ -26,20 +26,20 @@ function testTamotsuModule() {
 
     const testRunner = new GasTap();
 
-    testRunner('#load', (t) => {
+    testRunner('loading', (t) => {
       t.equal(typeof Tamotsu, 'object', 'Tamotsu is defined');
       t.equal(typeof Tamotsu.initialize, 'function', 'Tamotsu.initialize is defined');
       t.equal(typeof Tamotsu.onInitialized, 'function', 'Tamotsu.onInitialized is defined');
       t.equal(typeof Tamotsu.Table, 'undefined', 'Tamotsu.Table is not defined');
     });
 
-    testRunner('#initialize(ss)', (t) => {
+    testRunner('Tamotsu.initialize(ss)', (t) => {
       Tamotsu.initialize(testSs1);
       t.equal(typeof Tamotsu.Table, 'function', 'Tamotsu.Table is defined');
       t.equal(typeof Tamotsu.Table.define, 'function', 'Tamotsu.Table.define is defined');
     });
 
-    testRunner('#initialize(ss) with callback', (t) => {
+    testRunner('Tamotsu.initialize(ss) with callback', (t) => {
       let status = 'not ready';
       Tamotsu.onInitialized(function(ss) {
         status = 'ready with ' + ss.getId();
@@ -48,7 +48,7 @@ function testTamotsuModule() {
       t.equal(status, 'ready with ' + testSs1.getId(), 'onInitialized callback is called');
     });
 
-    testRunner('#Table.define({...}) with more than one spreadsheets', (t) => {
+    testRunner('Table.define() with more than one spreadsheets', (t) => {
       Tamotsu.initialize(testSs1);
       const table1 = Tamotsu.Table.define({sheetName: 'User1'});
 
@@ -59,14 +59,14 @@ function testTamotsuModule() {
       t.equal(table2.sheet().getParent().getId(), testSs2.getId(), 'Table object keeps correct sheet object');
     });
 
-    testRunner('#Table.dataRange() by ignoreBlank', (t) => {
+    testRunner('Table.dataRange() by readBlank', (t) => {
       Tamotsu.initialize(testSs1);
       const table1 = Tamotsu.Table.define({sheetName: 'User1'});
-      const table1_readBlank = Tamotsu.Table.define({sheetName: 'User1', ignoreBlank: false});
+      const table1_readBlank = Tamotsu.Table.define({sheetName: 'User1', readBlank: true});
 
       Tamotsu.initialize(testSs2);
       const table2 = Tamotsu.Table.define({sheetName: 'User2', rowShift: 1, columnShift: 1});
-      const table2_readBlank = Tamotsu.Table.define({sheetName: 'User2', rowShift: 1, columnShift: 1, ignoreBlank: false});
+      const table2_readBlank = Tamotsu.Table.define({sheetName: 'User2', rowShift: 1, columnShift: 1, readBlank: true});
 
       t.equal(table1.dataRange().getA1Notation(), 'A1:C3', 'Table object reads correct data range');
       t.equal(table1_readBlank.dataRange().getA1Notation(), 'A1:C5', 'Table object reads correct data range');
@@ -74,11 +74,28 @@ function testTamotsuModule() {
       t.equal(table2_readBlank.dataRange().getA1Notation(), 'B2:D6', 'Table object reads correct data range');
     });
 
+    testRunner('Table.all() and Relation_.all()', (t) => {
+      Tamotsu.initialize(testSs1);
+      const table1 = Tamotsu.Table.define({sheetName: 'User1'});
+      const table1_readBlank = Tamotsu.Table.define({sheetName: 'User1', readBlank: true});
+
+      Tamotsu.initialize(testSs2);
+      const table2 = Tamotsu.Table.define({sheetName: 'User2', rowShift: 1, columnShift: 1});
+      const table2_readBlank = Tamotsu.Table.define({sheetName: 'User2', rowShift: 1, columnShift: 1, readBlank: true});
+      
+      const row_ = (record) => record.row_;
+      const any = (record) => true;
+      t.equal(table1.all().map(row_).join(', '), table1.where(any).all().map(row_).join(', '), 'Row objects refer to the same range');
+      t.equal(table1_readBlank.all().map(row_).join(', '), table1_readBlank.where(any).all().map(row_).join(', '), 'Row objects refer to the same range');
+      t.equal(table2.all().map(row_).join(', '), table2.where(any).all().map(row_).join(', '), 'Row objects refer to the same range');
+      t.equal(table2_readBlank.all().map(row_).join(', '), table2_readBlank.where(any).all().map(row_).join(', '), 'Row objects refer to the same range');
+    })
+
     testRunner.finish();
   } catch (error) {
     console.error(error);
   }
 
-  DriveApp.removeFile(DriveApp.getFileById(testSs1.getId()));
-  DriveApp.removeFile(DriveApp.getFileById(testSs2.getId()));
+  DriveApp.getFileById(testSs1.getId()).setTrashed(true);
+  DriveApp.getFileById(testSs2.getId()).setTrashed(true);
 }

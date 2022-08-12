@@ -1,3 +1,4 @@
+
 /**
  * Tamotsu(保つ) is an object-spreadsheet mapping library like ActiveRecord for google apps script.
  *
@@ -34,7 +35,7 @@
 var Tamotsu = Tamotsu || {};
 /**
  * Register the given function as a callback on initialized
- * @param {Function} callback A function that is to be added to the callback list.
+ * @param {(spreadsheet:GoogleAppsScript.Spreadsheet.Spreadsheet)=>{}} callback A function that is to be added to the callback list.
  */
 Tamotsu.onInitialized = Tamotsu.onInitialized || function (callback) {};
 /**
@@ -60,7 +61,7 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {boolean} [autoIncrement=true] `true` when omitted
  * @property {number} [rowShift=0] `0` when omitted
  * @property {number} [columnShift=0] `0` when omitted
- * @property {boolean} [ignoreBlank=true] `true` when omitted
+ * @property {boolean} [readBlank=false] `false` when omitted
  */
 /**
  * @typedef {Object} Tamotsu.InstanceProperties
@@ -93,7 +94,7 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {(record:Tamotsu.Model)=>[]} valuesFrom
  * @property {()=>[]} allValues
  * @property {(recordOrAttributes:Tamotsu.Model|Object)=>false|Tamotsu.Model} create
- * @property {(recordOrAttributesArr:Tamotsu.Model[]|Object[]):false|Tamotsu.Model[]} batchCreate
+ * @property {(recordOrAttributesArr:Tamotsu.Model[]|Object[])=>false|Tamotsu.Model[]} batchCreate
  * @property {(recordOrAttributes:Tamotsu.Model|Object)=>boolean} update
  * @property {(recordOrAttributes:Tamotsu.Model|Object)=>boolean|Tamotsu.Model} createOrUpdate
  * @property {(record:Tamotsu.Model)=>void} destroy
@@ -113,3 +114,5 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {()=>Object} getAttributes
  * @property {(attributes:Object)=>void} setAttributes
  */
+
+
