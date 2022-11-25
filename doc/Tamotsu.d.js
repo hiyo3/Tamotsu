@@ -1,4 +1,3 @@
-
 /**
  * Tamotsu(保つ) is an object-spreadsheet mapping library like ActiveRecord for google apps script.
  *
@@ -114,5 +113,3 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {()=>Object} getAttributes
  * @property {(attributes:Object)=>void} setAttributes
  */
-
-
