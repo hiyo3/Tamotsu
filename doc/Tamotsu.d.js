@@ -3,7 +3,6 @@
  *
  * https://github.com/itmammoth/Tamotsu
  *
- *
  * ```js
  * // Initialize first
  * Tamotsu.initialize();
@@ -29,16 +28,19 @@
  * var record = new MyAgent();
  * record.firstName = 'your editor suggests props :)';
  * ```
+ *
  * @see {@link https://github.com/hiyo3/Tamotsu/tree/dev}
  */
 var Tamotsu = Tamotsu || {};
 /**
  * Register the given function as a callback on initialized
+ *
  * @param {(spreadsheet:GoogleAppsScript.Spreadsheet.Spreadsheet)=>{}} callback A function that is to be added to the callback list.
  */
 Tamotsu.onInitialized = Tamotsu.onInitialized || function (callback) {};
 /**
  * Initializes Tamotsu with the given objects
+ *
  * @param {GoogleAppsScript.Spreadsheet.Spreadsheet} [spreadsheet] Spreadsheet object you will handle.
  *   When not given, `SpreadsheetApp.getActive()` is used.
  */
@@ -46,9 +48,10 @@ Tamotsu.initialize = Tamotsu.initialize || function (spreadsheet) {};
 Tamotsu.Table = Tamotsu.Table || {};
 /**
  * Generate a new `Tamotsu.Table` class object
+ *
  * @param {Tamotsu.ClassProperties} classProperties
  * @param {Tamotsu.InstanceProperties} instanceProperties
- * @return {Tamotsu.Table}
+ * @return {Tamotsu.Table} A new Table object
  */
 Tamotsu.Table.define = Tamotsu.Table.define ||
   function (classProperties, instanceProperties) { };
@@ -82,14 +85,14 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {(column:string)=>number} sum
  * @property {(column:string)=>number} max
  * @property {(column:string)=>number} min
- * @property {(predicate:(record:Tamotsu.Model)=>boolean|Object)=>Tamotsu.Table} where
- * @property {(comparator:string|(a, b)=>number)=>Tamotsu.Table} order
+ * @property {(predicate:(record:Tamotsu.Model)=>boolean|Object)=>Tamotsu.TableRelation} where
+ * @property {(comparator:string|(a, b)=>number)=>Tamotsu.TableRelation} order
  * @property {()=>string[]} columns
  * @property {(column:string)=>number} columnIndexOf
  * @property {(column:string)=>string} columnABCFor
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} dataRange
  * @property {(row_:number)=>GoogleAppsScript.Spreadsheet.Range} rangeByRow
- * @property {(values:[])=>Tamotsu.Model} objectFrom
+ * @property {(values:[])=>Object} objectFrom
  * @property {(record:Tamotsu.Model)=>[]} valuesFrom
  * @property {()=>[]} allValues
  * @property {(recordOrAttributes:Tamotsu.Model|Object)=>false|Tamotsu.Model} create
@@ -100,6 +103,18 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {(callback:(nextId:number)=>void)=>void} withNextId
  * @property {()=>[]} idValues
  * @property {()=>number} idColumnIndex
+ */
+/**
+ * @typedef {Object} Tamotsu.TableRelation
+ * @property {(predicate:(record:Tamotsu.Model)=>boolean|Object)=>Tamotsu.TableRelation} where
+ * @property {()=>Tamotsu.Model[]} all
+ * @property {(comparator:string|(a, b)=>number)=>Tamotsu.TableRelation} order
+ * @property {()=>Tamotsu.Model} first
+ * @property {()=>Tamotsu.Model} last
+ * @property {(column:string)=>[]} pluck
+ * @property {(column:string)=>number} sum
+ * @property {(column:string)=>number} max
+ * @property {(column:string)=>number} min
  */
 /**
  * @typedef {Object} Tamotsu.Model
