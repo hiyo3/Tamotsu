@@ -21,10 +21,11 @@
  * /// @property {string} id
  * /// @property {string} firstName
  * /// @property {string} firstName
- * /// @typedef {Tamotsu.Model & Agent} MyAgent
- *
+ * /// @type {Tamotsu.ITable<Agent>}
  * var MyAgent = Tamotsu.Table.define({sheetName: 'Agents', idColumn: 'id' })
- * /// @type {MyAgent}
+ *
+ * /// @typedef {Tamotsu.IModel<Agent> & Agent} AgentRecord
+ * /// @type {AgentRecord}
  * var record = new MyAgent();
  * record.firstName = 'your editor suggests props :)';
  * ```
@@ -51,7 +52,7 @@ Tamotsu.Table = Tamotsu.Table || {};
  *
  * @param {Tamotsu.ClassProperties} classProperties
  * @param {Tamotsu.InstanceProperties} instanceProperties
- * @return {Tamotsu.Table} A new Table object
+ * @return {Tamotsu.ITable<Type>} A new Table object
  */
 Tamotsu.Table.define = Tamotsu.Table.define ||
   function (classProperties, instanceProperties) { };
@@ -66,65 +67,67 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {boolean} [readBlank=false] `false` when omitted
  */
 /**
- * @typedef {Object} Tamotsu.InstanceProperties
- * @property {(on:['create'|'update'])=>void} validate (optional) Validation callback that resturns `true` when valid
+ * @typedef {{[propName:string]: *, validate?:(on:'create'|'update')=>void}} Tamotsu.InstanceProperties
  */
 /**
- * @typedef {Object} Tamotsu.Table
+ * @template {{[propName:string]:*}} A Attributes
+ * @typedef {Object} Tamotsu.ITable
  * @property {number} rowShift
  * @property {number} columnShift
  * @property {string} idColumn
  * @property {()=>GoogleAppsScript.Spreadsheet.Sheet} sheet
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} baseRange
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} lastRange
- * @property {()=>Tamotsu.Model} first
- * @property {()=>Tamotsu.Model} last
- * @property {(id:*)=>Tamotsu.Model?} find
- * @property {()=>Tamotsu.Model[]} all
+ * @property {()=>(Tamotsu.IModel<A>&A)?} first
+ * @property {()=>(Tamotsu.IModel<A>&A)?} last
+ * @property {(id:string|number)=>Tamotsu.IModel<A>&A} find
+ * @property {()=>(Tamotsu.IModel<A>&A)[]} all
  * @property {(column:string)=>[]} pluck
  * @property {(column:string)=>number} sum
  * @property {(column:string)=>number} max
  * @property {(column:string)=>number} min
- * @property {(predicate:(record:Tamotsu.Model)=>boolean|Object)=>Tamotsu.TableRelation} where
- * @property {(comparator:string|(a, b)=>number)=>Tamotsu.TableRelation} order
+ * @property {(predicate:A|(record:Tamotsu.IModel<A>&A)=>boolean)=>Tamotsu.ITableRelation<A>} where
+ * @property {(comparator:string|(a:Tamotsu.IModel<A>&A, b:Tamotsu.IModel<A>&A)=>number)=>Tamotsu.ITableRelation<A>} order
  * @property {()=>string[]} columns
  * @property {(column:string)=>number} columnIndexOf
  * @property {(column:string)=>string} columnABCFor
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} dataRange
  * @property {(row_:number)=>GoogleAppsScript.Spreadsheet.Range} rangeByRow
- * @property {(values:[])=>Object} objectFrom
- * @property {(record:Tamotsu.Model)=>[]} valuesFrom
+ * @property {(values:[])=>A} objectFrom
+ * @property {(record:Tamotsu.IModel<A>&A)=>[]} valuesFrom
  * @property {()=>[]} allValues
- * @property {(recordOrAttributes:Tamotsu.Model|Object)=>false|Tamotsu.Model} create
- * @property {(recordOrAttributesArr:Tamotsu.Model[]|Object[])=>false|Tamotsu.Model[]} batchCreate
- * @property {(recordOrAttributes:Tamotsu.Model|Object)=>boolean} update
- * @property {(recordOrAttributes:Tamotsu.Model|Object)=>boolean|Tamotsu.Model} createOrUpdate
- * @property {(record:Tamotsu.Model)=>void} destroy
+ * @property {(recordOrAttributes:A|Tamotsu.IModel<A>&A)=>false|Tamotsu.IModel<A>&A} create
+ * @property {(recordOrAttributesArr:A[]|(Tamotsu.IModel<A>&A)[])=>false|(Tamotsu.IModel<A>&A)[]} batchCreate
+ * @property {(recordOrAttributes:A|Tamotsu.IModel<A>&A)=>boolean} update
+ * @property {(recordOrAttributes:A|Tamotsu.IModel<A>&A)=>boolean|Tamotsu.IModel<A>&A} createOrUpdate
+ * @property {(record:Tamotsu.IModel<A>&A)=>void} destroy
  * @property {(callback:(nextId:number)=>void)=>void} withNextId
  * @property {()=>[]} idValues
  * @property {()=>number} idColumnIndex
  */
 /**
- * @typedef {Object} Tamotsu.TableRelation
- * @property {(predicate:(record:Tamotsu.Model)=>boolean|Object)=>Tamotsu.TableRelation} where
- * @property {()=>Tamotsu.Model[]} all
- * @property {(comparator:string|(a, b)=>number)=>Tamotsu.TableRelation} order
- * @property {()=>Tamotsu.Model} first
- * @property {()=>Tamotsu.Model} last
+ * @template {{[propName:string]:*}} A Attributes
+ * @typedef {Object} Tamotsu.ITableRelation
+ * @property {(predicate:A|(record:Tamotsu.IModel<A>&A)=>boolean)=>Tamotsu.ITableRelation<A>} where
+ * @property {()=>(Tamotsu.IModel<A>&A)[]} all
+ * @property {(comparator:string|(a:Tamotsu.IModel<A>&A, b:Tamotsu.IModel<A>&A)=>number)=>Tamotsu.ITableRelation<A>} order
+ * @property {()=>(Tamotsu.IModel<A>&A)?} first
+ * @property {()=>(Tamotsu.IModel<A>&A)?} last
  * @property {(column:string)=>[]} pluck
  * @property {(column:string)=>number} sum
  * @property {(column:string)=>number} max
  * @property {(column:string)=>number} min
  */
 /**
- * @typedef {Object} Tamotsu.Model
- * @property {Object.<string, string>} errors Stores errors after `validate()`
- * @property {()=>boolean|Tamotsu.Model} save
- * @property {(attributes:Object)=>boolean|Tamotsu.Model} updateAttributes
+ * @template {{[propName:string]:*}} A Attributes
+ * @typedef {Object} Tamotsu.IModel
+ * @property {{[propName:string]: string}} errors Stores errors after `validate()`
+ * @property {()=>boolean|Tamotsu.IModel<A>} save
+ * @property {(attributes:A)=>boolean|Tamotsu.IModel<A>} updateAttributes
  * @property {()=>void} destroy
- * @property {(on:['create'|'update'])=>void} validate Test validity with current attributes; NOTE you need to assign it, see `Tamotsu.Table.define()` and `Tamotsu.InstanceProperties`.
+ * @property {(on:'create'|'update')=>void} validate Test validity with current attributes; NOTE you need to assign it, see `Tamotsu.Table.define()` and `Tamotsu.InstanceProperties`.
  * @property {()=>boolean} isValid
  * @property {()=>boolean} isNewRecord
- * @property {()=>Object} getAttributes
- * @property {(attributes:Object)=>void} setAttributes
+ * @property {()=>A} getAttributes
+ * @property {(attributes:A)=>void} setAttributes
  */
