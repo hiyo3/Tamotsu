@@ -78,29 +78,29 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {()=>GoogleAppsScript.Spreadsheet.Sheet} sheet
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} baseRange
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} lastRange
- * @property {()=>(Tamotsu.IModel<A>&A)?} first
- * @property {()=>(Tamotsu.IModel<A>&A)?} last
- * @property {(id:string|number)=>Tamotsu.IModel<A>&A} find
- * @property {()=>(Tamotsu.IModel<A>&A)[]} all
+ * @property {()=>(Tamotsu.IModel<A>)?} first
+ * @property {()=>(Tamotsu.IModel<A>)?} last
+ * @property {(id:string|number)=>Tamotsu.IModel<A>} find
+ * @property {()=>(Tamotsu.IModel<A>)[]} all
  * @property {(column:string)=>[]} pluck
  * @property {(column:string)=>number} sum
  * @property {(column:string)=>number} max
  * @property {(column:string)=>number} min
- * @property {(predicate:A|(record:Tamotsu.IModel<A>&A)=>boolean)=>Tamotsu.ITableRelation<A>} where
- * @property {(comparator:string|(a:Tamotsu.IModel<A>&A, b:Tamotsu.IModel<A>&A)=>number)=>Tamotsu.ITableRelation<A>} order
+ * @property {(predicate:A|(record:Tamotsu.IModel<A>)=>boolean)=>Tamotsu.ITableRelation<A>} where
+ * @property {(comparator:string|(a:Tamotsu.IModel<A>, b:Tamotsu.IModel<A>)=>number)=>Tamotsu.ITableRelation<A>} order
  * @property {()=>string[]} columns
  * @property {(column:string)=>number} columnIndexOf
  * @property {(column:string)=>string} columnABCFor
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} dataRange
  * @property {(row_:number)=>GoogleAppsScript.Spreadsheet.Range} rangeByRow
  * @property {(values:[])=>A} objectFrom
- * @property {(record:Tamotsu.IModel<A>&A)=>[]} valuesFrom
+ * @property {(record:Tamotsu.IModel<A>)=>[]} valuesFrom
  * @property {()=>[]} allValues
- * @property {(recordOrAttributes:A|Tamotsu.IModel<A>&A)=>false|Tamotsu.IModel<A>&A} create
- * @property {(recordOrAttributesArr:A[]|(Tamotsu.IModel<A>&A)[])=>false|(Tamotsu.IModel<A>&A)[]} batchCreate
- * @property {(recordOrAttributes:A|Tamotsu.IModel<A>&A)=>boolean} update
- * @property {(recordOrAttributes:A|Tamotsu.IModel<A>&A)=>boolean|Tamotsu.IModel<A>&A} createOrUpdate
- * @property {(record:Tamotsu.IModel<A>&A)=>void} destroy
+ * @property {(recordOrAttributes:A|Tamotsu.IModel<A>)=>false|Tamotsu.IModel<A>} create
+ * @property {(recordOrAttributesArr:A[]|(Tamotsu.IModel<A>)[])=>false|(Tamotsu.IModel<A>)[]} batchCreate
+ * @property {(recordOrAttributes:A|Tamotsu.IModel<A>)=>boolean} update
+ * @property {(recordOrAttributes:A|Tamotsu.IModel<A>)=>boolean|Tamotsu.IModel<A>} createOrUpdate
+ * @property {(record:Tamotsu.IModel<A>)=>void} destroy
  * @property {(callback:(nextId:number)=>void)=>void} withNextId
  * @property {()=>[]} idValues
  * @property {()=>number} idColumnIndex
@@ -108,11 +108,11 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
 /**
  * @template {{[propName:string]:*}} A Attributes
  * @typedef {Object} Tamotsu.ITableRelation
- * @property {(predicate:A|(record:Tamotsu.IModel<A>&A)=>boolean)=>Tamotsu.ITableRelation<A>} where
- * @property {()=>(Tamotsu.IModel<A>&A)[]} all
- * @property {(comparator:string|(a:Tamotsu.IModel<A>&A, b:Tamotsu.IModel<A>&A)=>number)=>Tamotsu.ITableRelation<A>} order
- * @property {()=>(Tamotsu.IModel<A>&A)?} first
- * @property {()=>(Tamotsu.IModel<A>&A)?} last
+ * @property {(predicate:A|(record:Tamotsu.IModel<A>)=>boolean)=>Tamotsu.ITableRelation<A>} where
+ * @property {()=>(Tamotsu.IModel<A>)[]} all
+ * @property {(comparator:string|(a:Tamotsu.IModel<A>, b:Tamotsu.IModel<A>)=>number)=>Tamotsu.ITableRelation<A>} order
+ * @property {()=>(Tamotsu.IModel<A>)?} first
+ * @property {()=>(Tamotsu.IModel<A>)?} last
  * @property {(column:string)=>[]} pluck
  * @property {(column:string)=>number} sum
  * @property {(column:string)=>number} max
@@ -120,7 +120,7 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  */
 /**
  * @template {{[propName:string]:*}} A Attributes
- * @typedef {Object} Tamotsu.IModel
+ * @typedef {A} Tamotsu.IModel
  * @property {{[propName:string]: string}} errors Stores errors after `validate()`
  * @property {()=>boolean|Tamotsu.IModel<A>} save
  * @property {(attributes:A)=>boolean|Tamotsu.IModel<A>} updateAttributes
