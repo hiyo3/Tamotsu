@@ -1,7 +1,8 @@
 /**
  * Tamotsu(保つ) is an object-spreadsheet mapping library like ActiveRecord for google apps script.
  *
- * https://github.com/itmammoth/Tamotsu
+ * @see {@link https://github.com/itmammoth/Tamotsu}
+ * @see {@link https://github.com/hiyo3/Tamotsu/tree/dev}
  *
  * ```js
  * // Initialize first
@@ -21,41 +22,41 @@
  * /// @property {string} id
  * /// @property {string} firstName
  * /// @property {string} firstName
+ *
  * /// @type {Tamotsu.ITable<Agent>}
  * var MyAgent = Tamotsu.Table.define({sheetName: 'Agents', idColumn: 'id' })
  *
- * /// @typedef {Tamotsu.IModel<Agent> & Agent} AgentRecord
- * /// @type {AgentRecord}
+ * /// @type {Tamotsu.IModel<Agent>}
  * var record = new MyAgent();
- * record.firstName = 'your editor suggests props :)';
  * ```
- *
- * @see {@link https://github.com/hiyo3/Tamotsu/tree/dev}
  */
 var Tamotsu = Tamotsu || {};
+
 /**
  * Register the given function as a callback on initialized
  *
- * @param {(spreadsheet:GoogleAppsScript.Spreadsheet.Spreadsheet)=>{}} callback A function that is to be added to the callback list.
+ * @param {(spreadsheet:GoogleAppsScript.Spreadsheet.Spreadsheet)=>void} callback A function that is to be added to the callback list.
  */
-Tamotsu.onInitialized = Tamotsu.onInitialized || function (callback) {};
-/**
- * Initializes Tamotsu with the given objects
- *
- * @param {GoogleAppsScript.Spreadsheet.Spreadsheet} [spreadsheet] Spreadsheet object you will handle.
- *   When not given, `SpreadsheetApp.getActive()` is used.
- */
-Tamotsu.initialize = Tamotsu.initialize || function (spreadsheet) {};
+Tamotsu.onInitialized = Tamotsu.onInitialized || function (callback) { };
+
+  /**
+   * Initializes Tamotsu with the given objects
+   *
+   * @param {GoogleAppsScript.Spreadsheet.Spreadsheet} [spreadsheet] Spreadsheet object you will handle.
+   *   When not given, `SpreadsheetApp.getActive()` is used.
+   */
+Tamotsu.initialize = Tamotsu.initialize || function (spreadsheet) { };
+
 Tamotsu.Table = Tamotsu.Table || {};
 /**
  * Generate a new `Tamotsu.Table` class object
  *
+ * @template {Tamotsu.InstanceProperties} Type
  * @param {Tamotsu.ClassProperties} classProperties
- * @param {Tamotsu.InstanceProperties} instanceProperties
+ * @param {Type} instanceProperties
  * @return {Tamotsu.ITable<Type>} A new Table object
  */
-Tamotsu.Table.define = Tamotsu.Table.define ||
-  function (classProperties, instanceProperties) { };
+Tamotsu.Table.define = Tamotsu.Table.define || function (classProperties, instanceProperties) { };
 
 /**
  * @typedef {Object} Tamotsu.ClassProperties
@@ -71,23 +72,23 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  */
 /**
  * @template {{[propName:string]:*}} A Attributes
- * @typedef {Object} Tamotsu.ITable
+ * @typedef {Object} Tamotsu._ITable
  * @property {number} rowShift
  * @property {number} columnShift
  * @property {string} idColumn
  * @property {()=>GoogleAppsScript.Spreadsheet.Sheet} sheet
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} baseRange
  * @property {()=>GoogleAppsScript.Spreadsheet.Range} lastRange
- * @property {()=>(Tamotsu.IModel<A>)?} first
- * @property {()=>(Tamotsu.IModel<A>)?} last
+ * @property {()=>Tamotsu.IModel<A>?} first
+ * @property {()=>Tamotsu.IModel<A>?} last
  * @property {(id:string|number)=>Tamotsu.IModel<A>} find
- * @property {()=>(Tamotsu.IModel<A>)[]} all
+ * @property {()=>Tamotsu.IModel<A>[]} all
  * @property {(column:string)=>[]} pluck
  * @property {(column:string)=>number} sum
  * @property {(column:string)=>number} max
  * @property {(column:string)=>number} min
- * @property {(predicate:A|(record:Tamotsu.IModel<A>)=>boolean)=>Tamotsu.ITableRelation<A>} where
- * @property {(comparator:string|(a:Tamotsu.IModel<A>, b:Tamotsu.IModel<A>)=>number)=>Tamotsu.ITableRelation<A>} order
+ * @property {(predicate:A|((record:Tamotsu.IModel<A>)=>boolean))=>Tamotsu.ITableRelation<A>} where
+ * @property {(comparator:string|((a:Tamotsu.IModel<A>, b:Tamotsu.IModel<A>)=>number))=>Tamotsu.ITableRelation<A>} order
  * @property {()=>string[]} columns
  * @property {(column:string)=>number} columnIndexOf
  * @property {(column:string)=>string} columnABCFor
@@ -97,7 +98,7 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {(record:Tamotsu.IModel<A>)=>[]} valuesFrom
  * @property {()=>[]} allValues
  * @property {(recordOrAttributes:A|Tamotsu.IModel<A>)=>false|Tamotsu.IModel<A>} create
- * @property {(recordOrAttributesArr:A[]|(Tamotsu.IModel<A>)[])=>false|(Tamotsu.IModel<A>)[]} batchCreate
+ * @property {(recordOrAttributesArr:A[]|Tamotsu.IModel<A>[])=>false|Tamotsu.IModel<A>[]} batchCreate
  * @property {(recordOrAttributes:A|Tamotsu.IModel<A>)=>boolean} update
  * @property {(recordOrAttributes:A|Tamotsu.IModel<A>)=>boolean|Tamotsu.IModel<A>} createOrUpdate
  * @property {(record:Tamotsu.IModel<A>)=>void} destroy
@@ -107,12 +108,20 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  */
 /**
  * @template {{[propName:string]:*}} A Attributes
+ * @typedef {new(attr:A)=>Tamotsu.IModel<A>} Tamotsu._IModelGen
+ */
+/**
+ * @template {{[propName:string]:*}} A Attributes
+ * @typedef {Tamotsu._IModelGen<A> & Tamotsu._ITable<A>} Tamotsu.ITable
+ */
+/**
+ * @template {{[propName:string]:*}} A Attributes
  * @typedef {Object} Tamotsu.ITableRelation
- * @property {(predicate:A|(record:Tamotsu.IModel<A>)=>boolean)=>Tamotsu.ITableRelation<A>} where
- * @property {()=>(Tamotsu.IModel<A>)[]} all
- * @property {(comparator:string|(a:Tamotsu.IModel<A>, b:Tamotsu.IModel<A>)=>number)=>Tamotsu.ITableRelation<A>} order
- * @property {()=>(Tamotsu.IModel<A>)?} first
- * @property {()=>(Tamotsu.IModel<A>)?} last
+ * @property {(predicate:A|((record:Tamotsu.IModel<A>)=>boolean))=>Tamotsu.ITableRelation<A>} where
+ * @property {()=>Tamotsu.IModel<A>[]} all
+ * @property {(comparator:string|((a:Tamotsu.IModel<A>, b:Tamotsu.IModel<A>)=>number))=>Tamotsu.ITableRelation<A>} order
+ * @property {()=>Tamotsu.IModel<A>?} first
+ * @property {()=>Tamotsu.IModel<A>?} last
  * @property {(column:string)=>[]} pluck
  * @property {(column:string)=>number} sum
  * @property {(column:string)=>number} max
@@ -120,8 +129,8 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  */
 /**
  * @template {{[propName:string]:*}} A Attributes
- * @typedef {A} Tamotsu.IModel
- * @property {{[propName:string]: string}} errors Stores errors after `validate()`
+ * @typedef {Object} Tamotsu._IModel
+ * @property {A} errors Stores errors after `validate()`
  * @property {()=>boolean|Tamotsu.IModel<A>} save
  * @property {(attributes:A)=>boolean|Tamotsu.IModel<A>} updateAttributes
  * @property {()=>void} destroy
@@ -130,4 +139,8 @@ Tamotsu.Table.define = Tamotsu.Table.define ||
  * @property {()=>boolean} isNewRecord
  * @property {()=>A} getAttributes
  * @property {(attributes:A)=>void} setAttributes
+ */
+/**
+ * @template {{[propName:string]:*}} A Attributes
+ * @typedef {A & Tamotsu._IModel<A>} Tamotsu.IModel
  */
